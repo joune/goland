@@ -1,0 +1,25 @@
+version: '3'
+services:
+  redis:
+    image: "redis:alpine"
+  kafka:
+    image: "spotify/kafka"
+  consumer:
+    build: 
+      context: .
+      dockerfile: Dockerfile.consumer
+  loader:
+    build: 
+      context: .
+      dockerfile: Dockerfile.loader
+  server:
+    build: 
+      context: .
+      dockerfile: Dockerfile.server
+    ports:
+      - "50051:50051"
+
+networks:
+  default:
+    external:
+      name: zenly_db

@@ -1,0 +1,7 @@
+FROM scylladb/scylla
+
+# enable counters
+RUN echo "experimental: true" >> /etc/scylla/scylla.yaml
+
+ENTRYPOINT /docker-entrypoint.py 
+

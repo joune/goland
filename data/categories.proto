@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package data;
+
+service Categories {
+  rpc GetCategories (CategoriesRequest) returns (CategoriesReply) {}
+}
+
+message CategoriesRequest {
+  uint64 user = 1;
+}
+
+message CategoriesReply {
+  uint64 most_seen = 1;
+  uint64 best_friend = 2;
+  uint64 crush = 3;
+  uint64 mutual_love_7days = 4;
+  uint64 mutual_love_global = 5;
+}

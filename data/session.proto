@@ -1,0 +1,13 @@
+syntax = "proto3";
+package data;
+
+import "google/protobuf/timestamp.proto";
+
+message Session {
+  uint64 user1 = 1;
+  uint64 user2 = 2;
+  google.protobuf.Timestamp starting_date = 3;
+  google.protobuf.Timestamp end_date = 4;
+  double latitude = 5;
+  double longitude = 6;
+}

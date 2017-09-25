@@ -1,0 +1,14 @@
+FROM golang
+
+RUN go get -u github.com/golang/protobuf/protoc-gen-go
+RUN go get -u github.com/golang/geo/s2
+RUN go get -u github.com/go-redis/redis
+RUN go get -u github.com/Shopify/sarama
+RUN go get -u github.com/gocql/gocql
+RUN go get -u golang.org/x/net/context
+RUN go get -u google.golang.org/grpc
+
+ADD . /go/src/github.com/joune/zenly
+RUN go install github.com/joune/zenly/consumer
+
+ENTRYPOINT /go/bin/consumer
