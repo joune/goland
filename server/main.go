@@ -29,13 +29,24 @@ func (s *server) GetCategories(ctx context.Context, in *data.CategoriesRequest) 
 		//don't report errors to client, just yield empty result (wdyt?)
 		return &data.CategoriesReply{}, nil
 	}
-	mostSeen := cat.MostSeen(user1, byUser2)
+	mostSeen := make(chan uint64)
+	go func() { mostSeen <- cat.MostSeen(user1, byUser2) }()
+	bf := make(chan uint64)
+	go func() { bf <- cat.BestFriend(user1, byUser2) }()
+	cr := make(chan uint64)
+	go func() { cr <- cat.Crush(user1, byUser2) }()
+	ms := <-mostSeen
+	ml7 := make(chan uint64)
+	go func() { ml7 <- cat.MutualLove_7Days(cql, user1, ms) }()
+	mlg := make(chan uint64)
+	go func() { mlg <- cat.MutualLoveGlobal(cql, user1) }()
+
 	return &data.CategoriesReply{
-		MostSeen:         mostSeen,
-		BestFriend:       cat.BestFriend(user1, byUser2),
-		Crush:            cat.Crush(user1, byUser2),
-		MutualLove_7Days: cat.MutualLove_7Days(cql, user1, mostSeen),
-		MutualLoveGlobal: cat.MutualLoveGlobal(cql, user1),
+		MostSeen:         ms,
+		BestFriend:       <-bf,
+		Crush:            <-cr,
+		MutualLove_7Days: <-ml7,
+		MutualLoveGlobal: <-mlg,
 	}, nil
 }
 
